@@ -1,0 +1,50 @@
+/* src/components/Console/Console.module.css */
+
+.console {
+    background-color: #1e1e1e;
+    border-radius: 6px;
+    overflow: hidden;
+    font-family: 'Courier New', Courier, monospace;
+    max-height: 300px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .consoleBody {
+    padding: 10px;
+    color: #ffffff;
+    overflow-y: auto;
+    flex-grow: 1;
+    min-height: 300px;
+  }
+  
+  .consoleLine {
+    margin-bottom: 5px;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+  
+  .consolePrompt {
+    color: #ffffff;
+    margin-right: 10px;
+  }
+
+  .infoLog {
+    color: #00ff00;
+  }
+
+  .warningLog {
+    color: #ffcc00;
+  }
+
+  .errorLog {
+    color: #ff0000;
+  }
+
+  .debugLog {
+    color: #00ccff;
+  }
+
+  .defaultLog {
+    color: #ffffff;
+  }

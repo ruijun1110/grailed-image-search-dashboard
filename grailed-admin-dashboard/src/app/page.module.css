@@ -1,0 +1,47 @@
+.homePage {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .welcome {
+    margin-top: 2em;
+    margin-bottom: 2rem;
+  }
+  
+  .buttonContainer {
+    display: flex;
+  }
+  
+  .button {
+    width: 400px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    font-size: 1.25rem;
+    border: 2px solid black;
+    transition: background-color 0.3s;
+  }
+  
+  .buttonBlack {
+    background-color: black;
+    color: white;
+    padding: 3em;
+  }
+  
+  .buttonBlack:hover {
+    background-color: #333;
+  }
+  
+  .buttonWhite {
+    background-color: white;
+    color: black;
+  }
+  
+  .buttonWhite:hover {
+    background-color: #f0f0f0;
+  }
