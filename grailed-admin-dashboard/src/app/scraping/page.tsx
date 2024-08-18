@@ -30,7 +30,7 @@ export default function ScrapingPage() {
 
   useEffect(() => {
     fetchScrapingStatus();
-    const eventSource = new EventSource(apiBaseUrl + "scraping_logs");
+    const eventSource = new EventSource(apiBaseUrl + "scraping/logs");
 
     eventSource.onmessage = (event) => {
       if (event.data.trim() !== "") {
@@ -72,7 +72,7 @@ export default function ScrapingPage() {
 
   const fetchScrapingStatus = async () => {
     try {
-      const response = await fetch(apiBaseUrl + "get_scraping_status");
+      const response = await fetch(apiBaseUrl + "scraping/status");
       const data = await response.json();
       addConsoleOutput({
         level: "INFO",
@@ -133,7 +133,7 @@ export default function ScrapingPage() {
 
   const handleStartScraping = async () => {
     try {
-      const response = await fetch(apiBaseUrl + "start_scraping", {
+      const response = await fetch(apiBaseUrl + "scraping/start", {
         method: "POST",
       });
       const data = await response.json();
@@ -155,7 +155,7 @@ export default function ScrapingPage() {
 
   const handleStopScraping = async () => {
     try {
-      const response = await fetch(apiBaseUrl + "stop_scraping", {
+      const response = await fetch(apiBaseUrl + "scraping/stop", {
         method: "POST",
       });
       const data = await response.json();
@@ -192,11 +192,16 @@ export default function ScrapingPage() {
 
     if (filterData.filterSubstring.length > 0) {
       try {
-        const response = await fetch(apiBaseUrl + "delete_items_by_substring", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ substrings: filterData.filterSubstring }),
-        });
+        const queryParams = new URLSearchParams();
+        filterData.filterSubstring.forEach((substring) =>
+          queryParams.append("substring", substring)
+        );
+        const response = await fetch(
+          `${apiBaseUrl}scraping/delete/substrings?${queryParams.toString()}`,
+          {
+            method: "DELETE",
+          }
+        );
         const data = await response.json();
         addConsoleOutput({
           level: "INFO",
@@ -214,11 +219,16 @@ export default function ScrapingPage() {
 
     if (filterData.ignoreDesigner.length > 0) {
       try {
-        const response = await fetch(apiBaseUrl + "delete_items_by_designers", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ designers: filterData.ignoreDesigner }),
-        });
+        const queryParams = new URLSearchParams();
+        filterData.ignoreDesigner.forEach((designer) =>
+          queryParams.append("designer", designer)
+        );
+        const response = await fetch(
+          `${apiBaseUrl}scraping/delete/designers?${queryParams.toString()}`,
+          {
+            method: "DELETE",
+          }
+        );
         const data = await response.json();
         console.log(data);
         addConsoleOutput({
@@ -238,13 +248,9 @@ export default function ScrapingPage() {
     if (filterData.deleteLowCountDesignersThreshold !== null) {
       try {
         const response = await fetch(
-          apiBaseUrl + "delete_low_count_designers",
+          `${apiBaseUrl}scraping/delete/low_count?threshold=${filterData.deleteLowCountDesignersThreshold}`,
           {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              threshold: filterData.deleteLowCountDesignersThreshold,
-            }),
+            method: "DELETE",
           }
         );
         const data = await response.json();
