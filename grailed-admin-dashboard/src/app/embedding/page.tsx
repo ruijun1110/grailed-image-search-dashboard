@@ -5,6 +5,8 @@ import { Console } from "@/components/Console/Console";
 import styles from "./page.module.css";
 import { add } from "date-fns";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 interface LogMessage {
   level: string;
   message: string;
@@ -31,12 +33,10 @@ export default function EmbeddingPage() {
     text_index_size: "-",
   });
 
-  const apiBaseUrl = "http://127.0.0.1:8000/api/";
-
   const handleStopEmbedding = async (embeddingType: "image" | "text") => {
     try {
       const response = await fetch(
-        `${apiBaseUrl}embeddings/${embeddingType}/stop`,
+        `${API_URL}embeddings/${embeddingType}/stop`,
         {
           method: "POST",
         }
@@ -80,12 +80,8 @@ export default function EmbeddingPage() {
   useEffect(() => {
     fetchEmbeddingStatus("image");
     fetchEmbeddingStatus("text");
-    const imageEventSource = new EventSource(
-      apiBaseUrl + "embeddings/image/logs"
-    );
-    const textEventSource = new EventSource(
-      apiBaseUrl + "embeddings/text/logs"
-    );
+    const imageEventSource = new EventSource(API_URL + "embeddings/image/logs");
+    const textEventSource = new EventSource(API_URL + "embeddings/text/logs");
 
     imageEventSource.onmessage = (event) => {
       if (event.data.trim() !== "") {
@@ -165,7 +161,7 @@ export default function EmbeddingPage() {
   const handleStartEmbedding = async (embeddingType: "image" | "text") => {
     try {
       const response = await fetch(
-        `${apiBaseUrl}embeddings/${embeddingType}/start`,
+        `${API_URL}embeddings/${embeddingType}/start`,
         {
           method: "POST",
         }
@@ -232,7 +228,7 @@ export default function EmbeddingPage() {
   const fetchEmbeddingStatus = async (embeddingType: "image" | "text") => {
     try {
       const response = await fetch(
-        `${apiBaseUrl}embeddings/${embeddingType}/status`
+        `${API_URL}embeddings/${embeddingType}/status`
       );
       const data = await response.json();
       if (embeddingType === "image") {

@@ -1,6 +1,6 @@
 "use client";
 
-import { FilterModal, FilterData } from "@/app/filter-scraping/page";
+import { FilterModal, FilterData } from "@/components/Filter/FilterModal";
 import React, { useState, useEffect } from "react";
 import styles from "./page.module.css";
 import { Console } from "@/components/Console/Console";
