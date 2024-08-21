@@ -7,6 +7,8 @@ import { Console } from "@/components/Console/Console";
 import Link from "next/link";
 import { parseISO, format } from "date-fns";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 interface LogMessage {
   level: string;
   message: string;
@@ -25,12 +27,9 @@ export default function ScrapingPage() {
     remaining_designer: 0,
     mongodb_storage: "-",
   });
-
-  const apiBaseUrl = "http://127.0.0.1:8000/api/";
-
   useEffect(() => {
     fetchScrapingStatus();
-    const eventSource = new EventSource(apiBaseUrl + "scraping/logs");
+    const eventSource = new EventSource(API_URL + "scraping/logs");
 
     eventSource.onmessage = (event) => {
       if (event.data.trim() !== "") {
@@ -72,7 +71,7 @@ export default function ScrapingPage() {
 
   const fetchScrapingStatus = async () => {
     try {
-      const response = await fetch(apiBaseUrl + "scraping/status");
+      const response = await fetch(API_URL + "scraping/status");
       const data = await response.json();
       addConsoleOutput({
         level: "INFO",
@@ -133,7 +132,7 @@ export default function ScrapingPage() {
 
   const handleStartScraping = async () => {
     try {
-      const response = await fetch(apiBaseUrl + "scraping/start", {
+      const response = await fetch(API_URL + "scraping/start", {
         method: "POST",
       });
       const data = await response.json();
@@ -155,7 +154,7 @@ export default function ScrapingPage() {
 
   const handleStopScraping = async () => {
     try {
-      const response = await fetch(apiBaseUrl + "scraping/stop", {
+      const response = await fetch(API_URL + "scraping/stop", {
         method: "POST",
       });
       const data = await response.json();
@@ -197,7 +196,7 @@ export default function ScrapingPage() {
           queryParams.append("substring", substring)
         );
         const response = await fetch(
-          `${apiBaseUrl}scraping/delete/substrings?${queryParams.toString()}`,
+          `${API_URL}scraping/delete/substrings?${queryParams.toString()}`,
           {
             method: "DELETE",
           }
@@ -224,7 +223,7 @@ export default function ScrapingPage() {
           queryParams.append("designer", designer)
         );
         const response = await fetch(
-          `${apiBaseUrl}scraping/delete/designers?${queryParams.toString()}`,
+          `${API_URL}scraping/delete/designers?${queryParams.toString()}`,
           {
             method: "DELETE",
           }
@@ -248,7 +247,7 @@ export default function ScrapingPage() {
     if (filterData.deleteLowCountDesignersThreshold !== null) {
       try {
         const response = await fetch(
-          `${apiBaseUrl}scraping/delete/low_count?threshold=${filterData.deleteLowCountDesignersThreshold}`,
+          `${API_URL}scraping/delete/low_count?threshold=${filterData.deleteLowCountDesignersThreshold}`,
           {
             method: "DELETE",
           }
